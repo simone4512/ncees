@@ -454,14 +454,18 @@ const Footer: React.FC = () => {
                 <Mail size={14} />
                 support@ncees-exam.com
               </ContactItem>
-              <ContactItem href="tel:18005550199">
+              <ContactItem href="tel:+16673199952">
                 <Phone size={14} />
-                1-800-555-0199
+                +1 (667) 319-9952
               </ContactItem>
               <ContactItemPlain>
                 <MapPin size={14} />
-                300 Venture Way, Hadley MA 01035
+                200 Verdae Blvd, Greenville, SC 29607-3900
               </ContactItemPlain>
+              <ContactItem href="https://t.me/NCEESExamPrep_LicenseToSucceed" target="_blank" rel="noopener noreferrer">
+                <ExternalLink size={14} />
+                Telegram
+              </ContactItem>
             </ContactItems>
           </BrandCol>
 

@@ -639,14 +639,14 @@ const FaqAnswerInner = styled.div`
 ───────────────────────────────────────── */
 const CONTACT_INFO = [
   { icon: <Mail size={16} />,    label: 'Email Support',   value: 'support@ncees-exam.com' },
-  { icon: <Phone size={16} />,   label: 'Phone',           value: '1-800-555-0199\nMon–Fri, 8am–6pm EST' },
-  { icon: <MapPin size={16} />,  label: 'Mailing Address', value: '300 Venture Way\nHadley, MA 01035' },
+  { icon: <Phone size={16} />,   label: 'Phone',           value: '+1 (667) 319-9952\nMon–Fri, 8am–6pm EST' },
+  { icon: <MapPin size={16} />,  label: 'Mailing Address', value: '200 Verdae Blvd\nGreenville, SC 29607-3900' },
   { icon: <Clock size={16} />,   label: 'Response Time',   value: 'Within 1–2 business days' },
 ];
 
 const QUICK_OPTIONS = [
   { icon: <Mail size={16} />,        label: 'Email Us Directly',    sub: 'support@ncees-exam.com',  href: 'mailto:support@ncees-exam.com' },
-  { icon: <MessageSquare size={16} />, label: 'Live Chat',           sub: 'Available 8am–6pm EST',  href: '#' },
+  { icon: <Send size={16} />,        label: 'Telegram',             sub: '@NCEESExamPrep_LicenseToSucceed', href: 'https://t.me/NCEESExamPrep_LicenseToSucceed' },
   { icon: <FileText size={16} />,    label: 'Submit a Ticket',      sub: 'Track your request',      href: '#' },
 ];
 
