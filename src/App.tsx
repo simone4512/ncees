@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
 import { ExamProvider } from './contexts/ExamContext';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { fetchMe, logout } from './store/slices/authSlice';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -25,12 +26,23 @@ import ContactPage from './pages/contact';
  * All pages are wrapped with necessary providers
  */
 function App() {
+  const dispatch = useAppDispatch();
+  const { token, user } = useAppSelector((s) => s.auth);
+
+  // On mount, if a token exists in localStorage re-hydrate the user
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchMe());
+    }
+  }, []);
+
+  const handleLogout = () => { dispatch(logout()); };
+
   return (
     <Router>
-      <AuthProvider>
         <ExamProvider>
           <div className="flex flex-col min-h-screen">
-            <NavBar />
+            <NavBar user={user} handleLogout={handleLogout} />
 
             <main className="flex-1">
               <Routes>
@@ -46,7 +58,9 @@ function App() {
                 <Route
                   path="/dashboard"
                   element={
-                    <DashboardPage />
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
                   }
                 />
                 <Route
@@ -74,7 +88,6 @@ function App() {
             <Footer />
           </div>
         </ExamProvider>
-      </AuthProvider>
     </Router>
   );
 }

@@ -1,18 +1,13 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAppSelector } from '../store/hooks';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-/**
- * Protected Route Component
- * Redirects unauthenticated users to login page
- * Used to protect exam and dashboard pages
- */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAppSelector((s) => s.auth);
 
   if (loading) {
     return (

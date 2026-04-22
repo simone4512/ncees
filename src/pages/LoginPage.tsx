@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { login, clearError } from '../store/slices/authSlice';
 import { AlertCircle, Mail, Lock, Eye, EyeOff, BookOpen, ArrowRight } from 'lucide-react';
 import styled, { keyframes, css } from 'styled-components';
 
@@ -539,36 +540,31 @@ const FontLoader = () => {
    COMPONENT
 ───────────────────────────────────────── */
 const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((s) => s.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [localError, setLocalError] = useState('');
   const [showPwd, setShowPwd] = useState(false);
   const navigate = useNavigate();
 
+  // Clear slice error on unmount
+  useEffect(() => () => { dispatch(clearError()); }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setLocalError('');
 
     if (!email || !password) {
-      setError('Email and password are required.');
+      setLocalError('Email and password are required.');
       return;
     }
 
-    setLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+    const result = await dispatch(login({ email, password }));
+
+    if (login.fulfilled.match(result)) {
+      toast.success('Login successful! Welcome back.');
       navigate('/dashboard');
-    } catch (err: any) {
-      const messages: Record<string, string> = {
-        'auth/user-not-found': 'No account found with this email. Please register first.',
-        'auth/wrong-password': 'Incorrect password. Please try again.',
-        'auth/invalid-email': 'Invalid email address format.',
-        'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
-      };
-      setError(messages[err.code] ?? 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -576,6 +572,8 @@ const LoginPage: React.FC = () => {
     setEmail('demo@example.com');
     setPassword('demo123456');
   };
+
+  const displayError = localError || error;
 
   return (
     <>
@@ -624,10 +622,10 @@ const LoginPage: React.FC = () => {
               <CardSubtitle>Sign in to your account to continue</CardSubtitle>
             </CardHeader>
 
-            {error && (
+            {displayError && (
               <ErrorBanner>
                 <AlertCircle size={17} />
-                {error}
+                {displayError}
               </ErrorBanner>
             )}
 

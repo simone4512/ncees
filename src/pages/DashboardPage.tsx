@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAppSelector } from '../store/hooks';
 import {
   Calendar, CheckCircle, AlertCircle, ArrowRight,
   BarChart3, BookOpen, FileText, HelpCircle, ChevronRight,
@@ -625,7 +625,7 @@ const RESOURCES = [
    COMPONENT
 ───────────────────────────────────────── */
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAppSelector((s) => s.auth);
   const navigate = useNavigate();
 
   const [candidateData, setCandidateData] = useState<CandidateProfile>({
@@ -637,12 +637,8 @@ const DashboardPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (user?.email) {
-      const namePart = user.email.split('@')[0].replace(/[._]/g, ' ');
-      setCandidateData(prev => ({
-        ...prev,
-        name: namePart.charAt(0).toUpperCase() + namePart.slice(1),
-      }));
+    if (user?.name) {
+      setCandidateData(prev => ({ ...prev, name: user.name }));
     }
   }, [user]);
 

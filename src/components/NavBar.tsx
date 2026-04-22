@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { BookOpen, LogOut, User, ChevronDown, Menu, X, Phone } from "lucide-react";
+import { BookOpen, LogOut, User, ChevronDown, Menu, X, Phone, Send } from "lucide-react";
 import styled, { css, keyframes } from "styled-components";
 
 /* ─────────────────────────────────────────
@@ -68,6 +68,29 @@ const UtilityLink = styled(Link)`
   transition: color 0.18s, background 0.18s;
 
   &:first-child { border-left: none; }
+
+  &:hover {
+    color: ${C.white};
+    background: rgba(255,255,255,0.07);
+  }
+
+  svg { opacity: 0.8; }
+`;
+
+const UtilityAnchor = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.72);
+  font-size: 12px;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 0 14px;
+  height: 100%;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  transition: color 0.18s, background 0.18s;
 
   &:hover {
     color: ${C.white};
@@ -487,7 +510,12 @@ const NAV_ITEMS = [
 /* ─────────────────────────────────────────
    COMPONENT
 ───────────────────────────────────────── */
-export default function Navbar({ user, handleLogout }) {
+interface NavbarProps {
+  user: { name: string; email: string } | null;
+  handleLogout: () => void;
+}
+
+export default function Navbar({ user, handleLogout }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
 
@@ -505,6 +533,10 @@ export default function Navbar({ user, handleLogout }) {
             <Phone size={12} />
             Contact Us
           </UtilityLink>
+          <UtilityAnchor href="https://t.me/NCEESExamPrep_LicenseToSucceed" target="_blank" rel="noopener noreferrer">
+            <Send size={12} />
+            Telegram
+          </UtilityAnchor>
           {user ? (
             <UtilityLink to="/dashboard">
               <User size={12} />
@@ -548,7 +580,7 @@ export default function Navbar({ user, handleLogout }) {
                 <>
                   <UserChip to="/dashboard">
                     <User size={14} />
-                    <span>{user.email}</span>
+                    <span>{user.name}</span>
                   </UserChip>
                   <BtnLogout onClick={handleLogout}>
                     <LogOut size={14} />
@@ -588,7 +620,7 @@ export default function Navbar({ user, handleLogout }) {
             <>
               <MobileUserLabel>
                 <User size={15} />
-                Signed in as <span>{user.email}</span>
+                Signed in as <span>{user.name}</span>
               </MobileUserLabel>
               <MobileLink to="/dashboard" $active={pathname === "/dashboard"}>
                 Dashboard
